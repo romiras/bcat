@@ -7,6 +7,7 @@ require 'bcat/browser'
 
 class Bcat
   VERSION = '0.6.2'
+  DEFAULT_CONTENT_TYPE = "text/html;charset=utf-8"
   include Rack::Utils
 
   attr_reader :format
@@ -15,6 +16,15 @@ class Bcat
     @config = {:Host => '127.0.0.1', :Port => 8091}.merge(config)
     @reader = Bcat::Reader.new(@config[:command], args)
     @format = @config[:format]
+
+    @as_html = @format == "html"
+    @content_type = @config[:content_type]
+    if @content_type.nil?
+      @content_type = DEFAULT_CONTENT_TYPE
+    else
+      @format ||= 'raw'
+    end
+    notice [@content_type, @format].inspect
   end
 
   def [](key)
@@ -35,7 +45,7 @@ class Bcat
 
   def call(env)
     notice "#{env['REQUEST_METHOD']} #{env['PATH_INFO'].inspect}"
-    [200, {"Content-Type" => "text/html;charset=utf-8"}, self]
+    [200, {"Content-Type" => @content_type}, self]
   end
 
   def assemble
@@ -52,7 +62,7 @@ class Bcat
   def each
     assemble
 
-    head_parser = Bcat::HeadParser.new
+    head_parser = @as_html ? Bcat::HeadParser.new : nil
 
     @filter.each do |buf|
       if head_parser.nil?
@@ -71,7 +81,7 @@ class Bcat
             head_parser.body
     end
 
-    yield foot
+    yield foot if head_parser
   rescue Errno::EINVAL
     # socket was closed
     notice "browser client went away"

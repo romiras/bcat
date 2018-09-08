@@ -42,6 +42,7 @@ ARGV.options do |argv|
   argv.on('-t', '--text')      { options[:format] = 'text' }
   argv.on('-b', '--browser=v') { |app|  options[:browser] = app }
   argv.on('-T', '--title=v')   { |text| options[:title] = text }
+  argv.on('-C', '--content-type=v')   { |content_type| options[:content_type] = content_type }
   argv.on('-a', '--ansi')      { options[:ansi] = true }
   argv.on('-p', '--persist')   { options[:persist] = true }
   argv.on('-c', '--command')   { options[:command] = true }
