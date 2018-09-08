@@ -6,7 +6,7 @@ require 'bcat/server'
 require 'bcat/browser'
 
 class Bcat
-  VERSION = '0.6.2'
+  VERSION = '0.7.0'
   DEFAULT_CONTENT_TYPE = "text/html;charset=utf-8"
   include Rack::Utils
 
