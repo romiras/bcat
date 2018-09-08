@@ -92,7 +92,7 @@ class Bcat
 
   def content_for_head(inject='')
     [
-      "\n" * 1000,
+#      "\n" * 1000,
       "<!DOCTYPE html>",
       "<html>",
       "<head>",
@@ -108,11 +108,13 @@ class Bcat
     "</body>\n</html>\n"
   end
 
+=begin
   def escape_js(string)
     string = string.gsub(/['\\]/) { |char| "\\#{char}" }
     string.gsub!(/\n/, '\n')
     string
   end
+=end
 
   def close
     unless @config[:persist]
